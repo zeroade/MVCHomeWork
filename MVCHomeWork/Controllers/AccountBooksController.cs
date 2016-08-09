@@ -33,22 +33,7 @@ namespace MVCHomeWork.Controllers
             ViewData.Model = viewList;
             return View();
         }
-
-        // GET: AccountBooks/Details/5
-        public ActionResult Details(Guid? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            AccountBook accountBook = db.AccountBooks.Find(id);
-            if (accountBook == null)
-            {
-                return HttpNotFound();
-            }
-            return View(accountBook);
-        }
-
+    
         // GET: AccountBooks/Create
         public ActionResult Create()
         {

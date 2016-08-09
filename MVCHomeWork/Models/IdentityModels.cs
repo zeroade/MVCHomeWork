@@ -31,5 +31,6 @@ namespace MVCHomeWork.Models
         }
 
         public System.Data.Entity.DbSet<MVCHomeWork.Models.AccountBook> AccountBooks { get; set; }
+        public object AccountBook { get; internal set; }
     }
 }
