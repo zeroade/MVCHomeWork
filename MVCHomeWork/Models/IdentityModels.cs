@@ -29,5 +29,7 @@ namespace MVCHomeWork.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<MVCHomeWork.Models.AccountBook> AccountBooks { get; set; }
     }
 }

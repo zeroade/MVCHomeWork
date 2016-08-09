@@ -23,14 +23,15 @@ namespace MVCHomeWork.Controllers
             return View();
         }
 
-        public ActionResult MoneyBookList()
-        {
-            ViewData.Model = new List<MoneyBook> {
-                new MoneyBook {  UseMoneyType= "支出",Money=10, Date=DateTime.Now.ToString("yyyy-MM-dd")},
-                new MoneyBook {  UseMoneyType= "收入",Money=100, Date=DateTime.Now.AddDays(2).ToString("yyyy-MM-dd")},
-                new MoneyBook {  UseMoneyType= "支出",Money=1000, Date=DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")}
-            };
-            return View();
-        }
+        //public ActionResult MoneyBookList()
+        //{
+        //    ViewData.Model = new List<MoneyBook> {
+        //        new MoneyBook {  UseMoneyType= "支出",Money=10, Date=DateTime.Now.ToString("yyyy-MM-dd")},
+        //        new MoneyBook {  UseMoneyType= "收入",Money=100, Date=DateTime.Now.AddDays(2).ToString("yyyy-MM-dd")},
+        //        new MoneyBook {  UseMoneyType= "支出",Money=1000, Date=DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")}
+        //    };
+        //    return View();
+        //}
+     
     }
 }
