@@ -13,19 +13,23 @@ namespace MVCHomeWork.Controllers
 {
     public class AccountBooksController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private readonly MoneyBookService _moneyBookSvc;
 
+        public AccountBooksController()
+        {
+            _moneyBookSvc = new MoneyBookService();
+        }   
         // GET: AccountBooks
         public ActionResult MoneyBookList()
         {
-            var viewTemp = db.AccountBooks.ToList();
+            var viewTemp = _moneyBookSvc.Lookup();
             var viewList = new List<MoneyBook> { };
             foreach (var item in viewTemp)
             {
                 MoneyBook tempItem = new MoneyBook
                 {
                     UseMoneyType = (item.Categoryyy == 0) ? "支出" : "收入",
-                    Money = 10,
+                    Money = item.Amounttt,
                     Date = item.Dateee.ToString("yyyy-MM-dd")
                 };
                 viewList.Add(tempItem);
@@ -50,8 +54,8 @@ namespace MVCHomeWork.Controllers
             if (ModelState.IsValid)
             {
                 accountBook.Id = Guid.NewGuid();
-                db.AccountBooks.Add(accountBook);
-                db.SaveChanges();
+                _moneyBookSvc.Add(accountBook);
+                _moneyBookSvc.Save();
                 return RedirectToAction("Index");
             }
 
@@ -65,7 +69,7 @@ namespace MVCHomeWork.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AccountBook accountBook = db.AccountBooks.Find(id);
+            AccountBook accountBook = _moneyBookSvc.GetSingle(id.Value);
             if (accountBook == null)
             {
                 return HttpNotFound();
@@ -80,10 +84,11 @@ namespace MVCHomeWork.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Categoryyy,Amounttt,Dateee,Remarkkk")] AccountBook accountBook)
         {
+            var oldData = _moneyBookSvc.GetSingle(accountBook.Id);
             if (ModelState.IsValid)
             {
-                db.Entry(accountBook).State = EntityState.Modified;
-                db.SaveChanges();
+                _moneyBookSvc.Edit(accountBook, oldData);
+                _moneyBookSvc.Save();
                 return RedirectToAction("Index");
             }
             return View(accountBook);
@@ -96,7 +101,7 @@ namespace MVCHomeWork.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AccountBook accountBook = db.AccountBooks.Find(id);
+            AccountBook accountBook = _moneyBookSvc.GetSingle(id.Value);
             if (accountBook == null)
             {
                 return HttpNotFound();
@@ -109,19 +114,10 @@ namespace MVCHomeWork.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(Guid id)
         {
-            AccountBook accountBook = db.AccountBooks.Find(id);
-            db.AccountBooks.Remove(accountBook);
-            db.SaveChanges();
+            AccountBook accountBook = _moneyBookSvc.GetSingle(id);
+            _moneyBookSvc.Delete(accountBook);
+            _moneyBookSvc.Save();
             return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }
